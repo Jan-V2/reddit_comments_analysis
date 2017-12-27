@@ -10,7 +10,7 @@ from langdetect import detect as lang_detect, lang_detect_exception
 
 set_logfile_name("cleaner")
 
-rows_per_loop = 1000
+rows_per_loop = 1000000
 
 
 def clean_data(dirty_db_path, clean_db_path):
@@ -33,7 +33,7 @@ def clean_data(dirty_db_path, clean_db_path):
         data = Filter.filter(data)
         data = list(map(lambda line: (line,), data))
 
-        log("inserting 100k rows")
+        log("inserting 1 million rows")
         query = "insert into bodies (bodies) values (?)"
         clean_db_cursor.executemany(query, data)
         clean_db.commit()
@@ -41,7 +41,6 @@ def clean_data(dirty_db_path, clean_db_path):
         log("done loop, getting more data.")
         inserted += len(data)
         data = dirty_db_cursor.fetchmany(rows_per_loop)
-        more_data = False
         if len(data) > 1:
             more_data = False
     log("done")
@@ -63,7 +62,7 @@ class Filter:
     @staticmethod
     def filter(dirty_data):
         log("starting filter")
-        tpool = Pool(processes=36)
+        tpool = Pool(processes=16)
         ret = []
         log("filtering deleted and not english")
         for line in tpool.map(Filter.__is_not_deleted_or_not_non_english, dirty_data):
