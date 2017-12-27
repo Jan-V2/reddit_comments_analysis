@@ -10,7 +10,7 @@ from langdetect import detect as lang_detect, lang_detect_exception
 
 set_logfile_name("cleaner")
 
-rows_per_loop = 1000000
+rows_per_loop = 100000
 
 
 def clean_data(dirty_db_path, clean_db_path):
@@ -33,7 +33,7 @@ def clean_data(dirty_db_path, clean_db_path):
         data = Filter.filter(data)
         data = list(map(lambda line: (line,), data))
 
-        log("inserting 1 million rows")
+        log("inserting 100k rows")
         query = "insert into bodies (bodies) values (?)"
         clean_db_cursor.executemany(query, data)
         clean_db.commit()

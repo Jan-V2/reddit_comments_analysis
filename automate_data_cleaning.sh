@@ -20,4 +20,6 @@ python3 $PWD/temp/$script $PWD/$data_1_name $PWD/$data_2_name
 wait
 python3 -m awscli s3 cp $PWD/$data_2_name $data_path_net/$out_file_name
 wait
+python3 -m awscli s3 cp $PWD/temp/cleaner.txt $data_path_net/log.txt
+wait
 shutdown
