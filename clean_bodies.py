@@ -1,7 +1,5 @@
 import sqlite3
 from functools import reduce
-from pprint import pprint
-from sqlite3 import Error
 from multiprocess.pool import Pool
 import sys
 from my_utils.platfowm_vars import ROOTDIR, dir_sep
@@ -65,7 +63,7 @@ class Filter:
     @staticmethod
     def filter(dirty_data):
         log("starting filter")
-        tpool = Pool(processes=6)
+        tpool = Pool(processes=36)
         ret = []
         log("filtering deleted and not english")
         for line in tpool.map(Filter.__is_not_deleted_or_not_non_english, dirty_data):
