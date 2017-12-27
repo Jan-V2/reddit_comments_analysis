@@ -41,7 +41,7 @@ def clean_data(dirty_db_path, clean_db_path):
         log("done loop, getting more data.")
         inserted += len(data)
         data = dirty_db_cursor.fetchmany(rows_per_loop)
-        if len(data) > 1:
+        if len(data) < 1:
             more_data = False
     log("done")
     log("inserted " + str(inserted) + " rows")
