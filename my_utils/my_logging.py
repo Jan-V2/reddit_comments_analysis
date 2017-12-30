@@ -5,7 +5,7 @@ from my_utils.platfowm_vars import ROOTDIR, dir_sep
 
 # todo make this use json and make a gui tool for filtering and viewing logfiles
 
-logfile_name = "log"
+logfile_name = ""
 
 def log_warning(logline):
     log(logline, 'Warning')
@@ -27,7 +27,7 @@ def log(logline, log_type):
 
 def write_to_logfile(line):
     print(line)
-    with open(ROOTDIR + dir_sep + logfile_name + ".txt",mode='a') as logfile:
+    with open(ROOTDIR + dir_sep + logfile_name + ".log.txt",mode='a') as logfile:
         logfile.write(line + '\n')
 
 def get_timestamp():

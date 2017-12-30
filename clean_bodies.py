@@ -1,18 +1,21 @@
 import sqlite3
 from functools import reduce
 from multiprocess.pool import Pool
+from multiprocessing import cpu_count
 import sys
 from my_utils.platfowm_vars import ROOTDIR, dir_sep
 from my_utils.my_logging import log_message as log, set_logfile_name
 from my_utils.sqlite_utils import create_connection
 from langdetect import detect as lang_detect, lang_detect_exception
-
+# todo if i'm going to use language detection more often
+# i should either write my own stripped down implementation or port a c++ module
 
 set_logfile_name("cleaner")
 
 rows_per_loop = 100000
+cpus = cpu_count()
 
-
+# this script removes links, gets rid of most punctuation and makes sure that all comments are in english
 def clean_data(dirty_db_path, clean_db_path):
     dirty_db_cursor = create_connection(dirty_db_path).cursor()
     clean_db = create_connection(clean_db_path)
@@ -25,6 +28,7 @@ def clean_data(dirty_db_path, clean_db_path):
     data = dirty_db_cursor.fetchmany(rows_per_loop)
 
     log("start")
+    log("detected " + str(cpus) + " as cpu count")
     inserted = 0
     more_data = True
     while more_data:
@@ -62,7 +66,7 @@ class Filter:
     @staticmethod
     def filter(dirty_data):
         log("starting filter")
-        tpool = Pool(processes=16)
+        tpool = Pool(processes=cpus)
         ret = []
         log("filtering deleted and not english")
         for line in tpool.map(Filter.__is_not_deleted_or_not_non_english, dirty_data):
