@@ -7,6 +7,8 @@ from my_utils.platfowm_vars import ROOTDIR, dir_sep
 
 logfile_name = ""
 
+
+
 def log_warning(logline):
     log(logline, 'Warning')
 
